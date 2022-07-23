@@ -15,9 +15,6 @@ app.use(express.static('public'));
 HTTPServer.listen(port, hostname,
     // listen callback
     () => {
-        console.log(
-        ">> [SERVER  ] Server now is listening\n"/
-        ">> [LINK    ] %s:%s", 
-        hostname, port);
+        console.log(">> [SERVER  ] Server now is listening\n>> [LINK    ] %s:%s", hostname, port);
     }
 );

@@ -1,3 +1,37 @@
 body{
     background-color: #1f1f1f;
+    color: #f1f1f1;
+}
+
+header{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+
+    font-size: 1.5vh;
+}
+
+div{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.helpDiv {
+    font-family: 'Gill Sans', 'Gill Sans MT', Calibri, 'Trebuchet MS', sans-serif;
+    font-weight: bold;
+
+    text-align: center;
+
+    display: flex;
+    flex-direction: column;
+}
+
+#gameScreen{
+    border-style: groove;
+    border-color: #40235681;
+    border-width: 8px;
+    border-radius: 10%;
+
+    width: 70%;
 }

@@ -5,13 +5,24 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Game</title>
+    <link rel="stylesheet" href="./styles/index.css">
 </head>
 <body>
     <header>
         <h1>Jogo</h1>
     </header>
     <div>
-        <canvas height="64" width="64" id="gameScreen" />
+        <canvas height="700" width="1100" id="gameScreen" />
+        
     </div>
+    <div class="helpDiv">
+        <p>
+            Andar: [ A, D ];<br>
+            Pular: [ W ];<br>
+            Ataque: [ J, K ];<br>
+            Defender: [ L ]
+        </p>
+    </div>
+    <script type="module" src="src/main.js"></script>
 </body>
 </html>
