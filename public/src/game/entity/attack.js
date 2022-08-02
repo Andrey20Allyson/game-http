@@ -1,11 +1,10 @@
-import { Vector2 } from "../bases/vector2.js";
 import { Game } from "../game.js";
 
 class Attack{
     /**@type {Attack[]} */
     static ATTACKS = {
-        "punch": new Attack(new Vector2(.5, .6), new Vector2(1, .3), 5, 10, 5, .3),
-        "kick": new Attack(new Vector2(.4, 0), new Vector2(1, .4), 8, 20, 15, .7)
+        "punch": new Attack([.5, .6], [1, .3], 5, 10, 5, .3),
+        "kick": new Attack([.4, 0], [1, .4], 8, 20, 15, .7)
     }
 
     /**
@@ -47,9 +46,9 @@ class Attack{
     useAttack(attackUser, entityList){
         var isRight = (1 + attackUser.faceTo) / 2
         var isLeft = (attackUser.faceTo - 1) / 2
-        var attackHitSize = new Vector2(attackUser.size.x * this.relativeHitSize.x, attackUser.size.y * this.relativeHitSize.y)
-        var HitX = attackUser.pos.x + attackUser.size.x * (isLeft + this.relativeHitPos.x * attackUser.faceTo) - attackHitSize.x * isLeft
-        var attackHitPos = new Vector2(HitX, attackUser.pos.y + (attackUser.size.y * this.relativeHitPos.y))
+        var attackHitSize = [attackUser.size.x * this.relativeHitSize.x, attackUser.size.y * this.relativeHitSize.y];
+        var HitX = attackUser.pos.x + attackUser.size.x * (isLeft + this.relativeHitPos.x * attackUser.faceTo) - attackHitSize.x * isLeft;
+        var attackHitPos = [HitX, attackUser.pos.y + (attackUser.size.y * this.relativeHitPos.y)];
 
         var hitBox = [...attackHitPos.list, ...attackHitSize.list]
 

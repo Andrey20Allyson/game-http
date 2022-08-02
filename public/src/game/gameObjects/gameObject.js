@@ -1,39 +1,29 @@
-import { Vector2 } from "../bases/vector2.js";
-import { Sprite } from "../gui/sprite.js";
-import { GameCanvas } from "../gui/gameCanvas.js";
 import { Object2D } from "./object2D.js";
 
-class GameObject extends Object2D{
-    constructor(){
-        super()
+class GameObject extends Object2D {
+    constructor() {
+        super();
 
-        this.sprite = new Sprite(this)
+        /**@type {Vector2} */
+        this.spriteID = [1, 0];
+        this.spriteType = 'repeat';
 
-        this.velocity = new Vector2()
+        /**@type {Vector2} */
+        this.velocity = [0, 0];
     };
 
-    draw(){
-        super.draw();
-
-        var posY = -(this.pos.y - GameCanvas.canvas.height + this.size.y);
-        GameCanvas.context.fillStyle = this.color;
-        GameCanvas.context.fillRect(this.pos.x, posY, this.size.x, this.size.y);
-
-        this.sprite.draw();
+    /**@type {RenderData} */
+    get renderData() {
+        return [...this.pos, ...this.size, ...this.spriteID, this.spriteType];
     };
 
-    /**
-     * 
-     * @param {Vector2} pos 
-     * @param {Vector2} size 
-     * @returns boolean
-     */
-    colliding(x, y, w, h){
+    /**@type {(x: number, y: number, w: number, h: number) => boolean} */
+    colliding(x, y, w, h) {
         return (
-            (this.pos.x < x + w) &&
-            (this.pos.x + this.size.x > x) &&
-            (this.pos.y < x + h) &&
-            (this.pos.y + this.size.y > y)
+            (this.pos[0] < x + w) &&
+            (this.pos[0] + this.size[0] > x) &&
+            (this.pos[1] < x + h) &&
+            (this.pos[1] + this.size[1] > y)
         );
     };
 };

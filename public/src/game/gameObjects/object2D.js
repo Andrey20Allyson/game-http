@@ -1,16 +1,14 @@
-import { Vector2 } from "../bases/vector2.js";
-
 class Object2D{
-    constructor(){
-        this.pos = new Vector2()
-        this.size = new Vector2(80, 80)
-        this.color = "#4a4a4aff"
-    }
+    /**@type {Vector2} */
+    pos = [0, 0];
+    /**@type {Vector2} */
+    size = [80, 80];
+    color = '#4a4a4aff';
 
-    /**
-     * @returns {void}
-     */
-    draw(){};
+    constructor() {
+        this.pos = [0, 0];
+        this.size = [80, 80];
+    }
 }
 
 export { Object2D };

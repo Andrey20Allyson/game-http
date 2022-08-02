@@ -1,4 +1,3 @@
-import { Vector2 } from "../bases/vector2.js";
 import { StatusBar } from "./statusBar.js";
 import { GameCanvas } from "./gameCanvas.js";
 
@@ -10,9 +9,9 @@ class GUI{
     constructor(player){
         this.referencePlayer = player;
 
-        this.playerHealth = new StatusBar(.63, "Health", new Vector2(70, GameCanvas.canvas.height - 40), 800, "#af0a0aff", "#0afa6aff");
-        this.playerExp = new StatusBar(.8, "Exp", new Vector2(20, GameCanvas.canvas.height - 20 - 50), 350, "#353500ff", "#ffff0aff");
-        this.playerEnergy = new StatusBar(.8, "Energy", new Vector2(390, GameCanvas.canvas.height - 20 - 50), 430, "#004867ff", "#00b3ffff");
+        this.playerHealth = new StatusBar(.63, "Health", [70, GameCanvas.canvas.height - 40], 800, "#af0a0aff", "#0afa6aff");
+        this.playerExp = new StatusBar(.8, "Exp", [20, GameCanvas.canvas.height - 20 - 50], 350, "#353500ff", "#ffff0aff");
+        this.playerEnergy = new StatusBar(.8, "Energy", [390, GameCanvas.canvas.height - 20 - 50], 430, "#004867ff", "#00b3ffff");
     }
 
     draw(){

@@ -1,7 +1,4 @@
-import { Vector2 } from "../bases/vector2.js"
-
 import { GameCanvas } from "./gameCanvas.js"
-
 
 class StatusBar{
     /**
@@ -17,7 +14,7 @@ class StatusBar{
         this.fillPerc = fillPerc ? fillPerc: 1
         this.title = title ? title: "N/A"
         /**@type {Vector2} */
-        this.pos = pos ? pos: new Vector2()
+        this.pos = pos || [0, 0];
         this.width = width ? width: 500
         this.underColor = underColor ? underColor: "#000000ff"
         this.upperColor = upperColor ? upperColor: "#f0f0f0ff"
@@ -60,6 +57,7 @@ class StatusBar{
         GameCanvas.context.lineTo(this.pos.x + this.width, inverseY + 20)
         GameCanvas.context.lineTo(this.pos.x, inverseY + 20)
         GameCanvas.context.lineTo(this.pos.x + 40, inverseY)
+        GameCanvas.context.closePath();
 
         var marks = 3
 

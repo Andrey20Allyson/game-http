@@ -1,38 +1,40 @@
-import { Vector2 } from "../bases/vector2.js";
 import { GameObject } from "../gameObjects/gameObject.js";
 import { Delayer } from '../bases/delayer.js';
-import { Sprite } from "../gui/sprite.js";
 import { Skill } from "./skill.js";
-import { Game } from "../game.js";
+// import { Game } from "../game.js";
 
 class Entity extends GameObject {
-    constructor(){
-        super()
+    /**@type {string?} */
+    id = null;
 
-        this.size = new Vector2(64, 128)
-        this.walkDir = new Vector2()
+    constructor(){
+        super();
+
+        this.size = [64, 128];
+        this.walkDir = [0, 0];
 
         /**@type {String} */
-        this.color = "#ffff4aff"
+        this.color = "#ffff4aff";
 
-        /**@type {Sprite} */
-        this.sprite = new Sprite(this, "test model1", "stopRight0")
+        /**@type {Array<number>} */
+        this.spriteID = [0, 2];
+        this.spriteType = 'fill';
 
         /**@type {Skill} */
-        this.skill = new Skill()
+        this.skill = new Skill();
 
-        this.health = this.maxHealth
-        this.energy = this.maxEnergy
+        this.health = this.maxHealth;
+        this.energy = this.maxEnergy;
 
-        this.blocking = false
-        this.alive = true
-        this.faceTo = 1
-        this.attack = null
+        this.blocking = false;
+        this.alive = true;
+        this.faceTo = 1;
+        this.attack = null;
 
-        this.delayer = new Delayer()
-        this.delayer.addDelay("heal", 8)
-        this.delayer.addDelay("attack", 0)
-        this.delayer.addDelay("blockingEnergyUsage", 6)
+        this.delayer = new Delayer();
+        this.delayer.addDelay("heal", 8);
+        this.delayer.addDelay("attack", 0);
+        this.delayer.addDelay("blockingEnergyUsage", 6);
     }
 
     get maxHealth(){
@@ -84,12 +86,12 @@ class Entity extends GameObject {
 
         if(newEnergy > 0){
             this.energy = newEnergy
-            this.delayer.setTime("heal", Math.trunc(3 * Game.TICK_RATE / this.skill.regeneration))
+            this.delayer.setTime("heal", Math.trunc(3 * 35 /*Game.TICK_RATE*/ / this.skill.regeneration))
             hasEnough = true
         } else {
             this.energy = this.maxEnergy * .04
             this.takeDamage(this.maxHealth * .02 / this.skill.strength)
-            this.delayer.setTime("heal", Math.trunc(9 * Game.TICK_RATE / this.skill.regeneration))
+            this.delayer.setTime("heal", Math.trunc(9 * 35 /*Game.TICK_RATE*/ / this.skill.regeneration))
         }
 
         return hasEnough
