@@ -1,4 +1,8 @@
-class Object2D{
+/**
+ * @typedef {import("game").Vector2} Vector2
+ */
+
+class Object2D {
     /**@type {Vector2} */
     pos = [0, 0];
     /**@type {Vector2} */

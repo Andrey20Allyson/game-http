@@ -12,39 +12,20 @@ var connect = io;
 
 const REQUEST_TIMEOUT = 5000
 
-class SocketReq {
+/**
+ * 
+ * @returns {Promise<Socket>}
+ */
+function connectWithServer() {
+    return new Promise((resolve) => {
+        var socket = connect();
 
-    /**
-     * 
-     * @returns {Promise<{socket: Socket}>}
-     */
-    static connectWithServer() {
-        return new Promise((resolve) => {
-            var socket = connect();
-
-            socket.on('connect', () => {
-                resolve({socket})
-            });
+        socket.on('connect', () => {
+            console.log('>> Connected with id: %s', socket.id);
+            resolve(socket)
         });
-    }
-
-    /**
-     * 
-     * @param {Socket} socket 
-     * @returns {Promise<{ping: number}>}
-     */
-    static ping(socket) {
-        return new Promise((resolve) => {
-            var before = new Date().getTime();
-
-            socket.emit('r-ping', () => {
-                var now = new Date().getTime();
-                var ping = Math.trunc((now - before) / 2);
-
-                resolve({ping});
-            });
-        });
-    }
+    });
 }
 
-export { SocketReq };
+
+export { connectWithServer };

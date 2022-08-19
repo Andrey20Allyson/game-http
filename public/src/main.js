@@ -1,29 +1,26 @@
-import { GameCanvas } from "./game/gui/gameCanvas.js";
-import { SocketReq } from "./server-connection/connection.js";
-import { KeyboardListener } from "./game/input/KeyboardListener.js";
-
-/**
- * @typedef {import('./game/gameObjects/gameObject').GameObject} GameObject
- * @typedef {import('./game/bases/vector2').RenderData} RenderData
- */
+import { GameCanvas } from "./gui/gameCanvas.js";
+import { connectWithServer } from "./server-connection/connection.js";
+import { KeyboardListener } from "./input/keyboardListener.js";
 
 const LISTENER = new KeyboardListener();
 
 GameCanvas.init('gameScreen');
 
-SocketReq.connectWithServer()
-.then(
-    ({socket}) => {
-    console.log('>> Connected with id: %s', socket.id);
-    GameCanvas.start();
+connectWithServer()
+.then(socket => {
 
-    setInterval(() => {
-        socket.emit('client-update', LISTENER.keysPresseds)
-    }, 1000 / 15)
+    let noKeysCount = 0;
 
-    socket.on('game-update', 
-    /**@type {(renderDatas: RenderData[]) => void} */
-    (renderDatas) => {
-        GameCanvas.renderDatas = renderDatas;
-    });
+    let keysListenerUpdate = setInterval(() => {
+        noKeysCount = LISTENER.pressedKeys.length ? 0: noKeysCount + 1; 
+        if(noKeysCount < 2)
+            socket.emit('client-update', LISTENER.pressedKeys);
+    }, 1000 / 15);
+
+    socket.on('player-update', playerGuiData => GameCanvas.gui.setData( playerGuiData ));
+
+    socket.on('game-update', renderDatas => GameCanvas.render( renderDatas ));
+})
+.catch(reason => {
+    console.log(reason);
 });

@@ -6,9 +6,14 @@ class Delayer{
         this.times = {}
     }
 
+    /**
+     * 
+     * @param {string} name 
+     * @param {number} time 
+     */
     addDelay(name, time){
-        this.delays[name] = time
-        this.times[name] = time
+        this.delays[name] = time;
+        this.times[name] = time;
     }
 
     /**
@@ -17,7 +22,7 @@ class Delayer{
      * @param {Number} delay 
      */
     setTime(name, delay){
-        this.times[name] = delay > this.times[name] ? delay: this.times[name] 
+        this.times[name] = delay > 0 ? delay: 0; 
     }
 
     /**
@@ -56,7 +61,7 @@ class Delayer{
      * @param {String} name 
      */
     next(name){
-        this.times[name] -= Boolean(this.times[name])
+        this.times[name] -= Boolean(this.times[name]);
     }
 }
 

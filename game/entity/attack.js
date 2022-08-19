@@ -1,4 +1,6 @@
-import { Game } from "../game.js";
+/**
+ * @typedef {import('./entity').Entity} Entity
+ */
 
 class Attack{
     /**@type {Attack[]} */
@@ -43,14 +45,14 @@ class Attack{
      * @param {Entity} attackUser 
      * @param {Entity[]} entityList
      */
-    useAttack(attackUser, entityList){
+    useAttack(attackUser, entityList, tickRate){
         var isRight = (1 + attackUser.faceTo) / 2
         var isLeft = (attackUser.faceTo - 1) / 2
-        var attackHitSize = [attackUser.size.x * this.relativeHitSize.x, attackUser.size.y * this.relativeHitSize.y];
-        var HitX = attackUser.pos.x + attackUser.size.x * (isLeft + this.relativeHitPos.x * attackUser.faceTo) - attackHitSize.x * isLeft;
-        var attackHitPos = [HitX, attackUser.pos.y + (attackUser.size.y * this.relativeHitPos.y)];
+        var attackHitSize = [attackUser.size[0] * this.relativeHitSize[0], attackUser.size[1] * this.relativeHitSize[1]];
+        var HitX = attackUser.pos[0] + attackUser.size[0] * (isLeft + this.relativeHitPos[0] * attackUser.faceTo) - attackHitSize[0] * isLeft;
+        var attackHitPos = [HitX, attackUser.pos[1] + (attackUser.size[1] * this.relativeHitPos[1])];
 
-        var hitBox = [...attackHitPos.list, ...attackHitSize.list]
+        var hitBox = [...attackHitPos, ...attackHitSize]
 
         /**@type {Entity[]} */
         var targets = []
@@ -64,17 +66,17 @@ class Attack{
         if(targets.length){
             for(var target of targets){
                 var energyMult = attackUser.energy < this.energyUsage ? .2: 1
-                target.takeDamage(this.baseDamage * attackUser.skill.strength * (1 - .8 * (attackUser.energy < this.energyUsage)))
-                target.velocity.y += this.baseDamage * 2
-                target.velocity.x += attackUser.skill.strength * attackUser.faceTo * this.baseDamage * (1 - .4 * target.blocking)
+                target.takeDamage(this.baseDamage * attackUser.skill.strength * (1 - .8 * (attackUser.energy < this.energyUsage)), tickRate)
+                target.velocity[1] += this.baseDamage * 2
+                target.velocity[0] += attackUser.skill.strength * attackUser.faceTo * this.baseDamage * (1 - .4 * target.blocking)
 
-                attackUser.useEnergy(this.energyUsage * (1 + .4 * target.blocking))
+                attackUser.useEnergy(this.energyUsage * (1 + .4 * target.blocking), tickRate)
             }
         } else {
-            attackUser.useEnergy(this.energyUsage / 2)
+            attackUser.useEnergy(this.energyUsage / 2, tickRate)
         }
 
-        attackUser.delayer.setTime("attack", Math.trunc(Game.TICK_RATE * this.delay))
+        attackUser.delayer.setTime("attack", Math.trunc(tickRate * this.delay))
     }
 }
 

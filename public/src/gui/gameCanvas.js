@@ -1,12 +1,11 @@
-import { GameObject } from '../gameObjects/gameObject.js';
 import { GUI } from './gui.js';
+import { StatusBar } from './statusBar.js';
 
 /**
- * @typedef {import('../gameObjects/gameObject').GameObject} GameObject
- * @typedef {import('../game.js').Game} Game
- * @typedef {import('../entity/player.js').Player} Player
- * @typedef {import('../bases/vector2.js').RenderData} RenderData
  * @typedef {(x: number, y: number, w: number, h: number, spriteX: number, spriteY: number) => void} SpriteMethods
+ * @typedef {import('game').GameRenderData} GameRenderData
+ * @typedef {import('game').RenderData} RenderData
+ * @typedef {import('game').EntityRenderData} EntityRenderData
  */
 
 class GameCanvasInitError extends Error {
@@ -36,8 +35,10 @@ class GameCanvas{
     static gui = null;
     /**@type {HTMLImageElement?} */
     static sprites = null;
+    static SPRITES_IMAGE_WIDTH = 32;
+    static SINGLE_SPRITE_SIZE = 32;
     static rendering = false;
-    static REFRESH_RATE = 40;
+    static REFRESH_RATE = 50;
 
     static DRAW_SPRITES = {
         /**@type {SpriteMethods} */
@@ -73,15 +74,22 @@ class GameCanvas{
             var spritePos = [spriteX * 32, spriteY * 32];
             var maxSize = Math.max(w, h);
 
-            this.context.drawImage(this.sprites, ...spritePos, 32, 32, x, y, maxSize, maxSize);
+            this.context.drawImage(this.sprites, ...spritePos, 32, 32, x - w / 2, y , maxSize, maxSize);
         }
     }
 
     /**
      * 
+     * @param {number} index 
+     * @returns {[number, number]}
+     */
+    static spriteIndexToVector2(index) {
+        return [index % this.SPRITES_IMAGE_WIDTH, Math.trunc( index / this.SPRITES_IMAGE_WIDTH ) ]
+    }
+
+    /**
+     * 
      * @param {string} canvasID 
-     * @param {Game} game
-     * @param {Player} player
      * @param {CanvasRenderingContext2D?} config
      */
     static init(canvasID, config = {imageSmoothingEnabled: false}) {
@@ -89,49 +97,68 @@ class GameCanvas{
             throw new GameCanvasInitError();
 
         this.canvas = document.getElementById(canvasID);
-        // this.gui = new GUI();
+
+        this.gui = new GUI();
         
         /**@type {CanvasRenderingContext2D} */
         this.context = this.canvas.getContext('2d');
+
         this.sprites = document.createElement('img');
         this.sprites.src = './sprites.png';
 
-        for(let [key, value] of Object.entries(config)) if(typeof value != 'function') {
+        for(let [key, value] of Object.entries(config)) if(typeof value != 'function' && typeof this.context[key] != 'function') {
             this.context[key] = value;
         };
     };
 
-    static start() {
-        this.rendering = true;
-        this.render();
+    /**
+     * 
+     * @param {RenderData[]} renderData 
+     */
+    static renderGameObject(renderData) {
+        for(let [x, y, w, h, spriteIndex, spriteType] of renderData) if(spriteType in this.DRAW_SPRITES) {
+            this.DRAW_SPRITES[spriteType](x, y, w, h, ...this.spriteIndexToVector2(spriteIndex));
+        } else {
+            throw new SpriteTypeError(`sprite render method: [ ${spriteType}(); ] dont exist!`);
+        }
     }
 
-    /**@type {(_: GameObject) => {inverseY: number, spritePos: Array<number>}} */
-    static getRenderValues(renderObject) {
-        var inverseY = -(renderObject.pos.y - this.canvas.height + renderObject.size.y);
+    /**
+     * 
+     * @param {EntityRenderData[]} renderData 
+     */
+    static renderEntity(renderData) {
+        for(let [x, y, w, h, spriteIndex, spriteType, health, maxHealth] of renderData) if(spriteType in this.DRAW_SPRITES) {
+            this.DRAW_SPRITES[spriteType](x, y, w, h, ...this.spriteIndexToVector2(spriteIndex));
 
-        var spritePos = renderObject.spriteID.map( 
-            (value, index, array) => value * 32 
-        );
+            if(health < maxHealth){
+                let healthBar = new StatusBar(1, " ", [0, 0], 100, "#0040202f", "#00f0b0af");
 
-        return { inverseY, spritePos };
+                healthBar.pos = [
+                    x - (healthBar.width - w + 20) / 2, 
+                    healthBar.pos[1] = y + h + 10
+                ];
+    
+                healthBar.fillPerc = health / maxHealth;
+                healthBar.draw();
+            };
+        } else {
+            throw new SpriteTypeError(`sprite render method: [ ${spriteType}(); ] dont exist!`);
+        }
     }
 
-    static async render() {
-        while(this.rendering){
-            this.context.fillStyle = '#00a0f0ff';
-            this.context.fillRect(0, 0, GameCanvas.canvas.width, GameCanvas.canvas.height);
+    /**
+     * 
+     * @param {GameRenderData} renderData 
+     */
+    static render(renderData) {
+        this.context.fillStyle = '#00a0f0ff';
+        this.context.fillRect(0, 0, GameCanvas.canvas.width, GameCanvas.canvas.height);
 
-            for (let [x, y, w, h, spriteX, spriteY, spriteType] of this.renderDatas) if(spriteType in this.DRAW_SPRITES) {
-                this.DRAW_SPRITES[spriteType](x, y, w, h, spriteX, spriteY);
-            } else {
-                throw new SpriteTypeError(`sprite render method: [ ${spriteType}(); ] dont exist!`);
-            }
-
-            // this.gui.draw();
-
-            await new Promise((res) => setTimeout(res, 1000 / this.REFRESH_RATE));
-        };
+        this.renderGameObject(renderData[0]);
+        this.renderEntity(renderData[1]);
+        this.gui.draw();
+        this.renderGameObject(renderData[2]);
     }
 };
 

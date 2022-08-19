@@ -1,11 +1,32 @@
 import { GameObject } from "../gameObjects/gameObject.js";
 import { Delayer } from '../bases/delayer.js';
 import { Skill } from "./skill.js";
-// import { Game } from "../game.js";
+import { Sprite } from '../gameObjects/sprite.js';
+import { Anim } from '../gameObjects/animation.js'
+
+/**
+ * @typedef {import("game").EntityRenderData} EntityRenderData
+ */
 
 class Entity extends GameObject {
     /**@type {string?} */
     id = null;
+    /**@type {Sprite} */
+    sprite;
+    /**
+     * @type {{
+     *   walk: Anim?,
+     *   jump: Anim?
+     *   attacks: [string, Anim][]?
+     * }} 
+     */
+    animations = {
+        walk: null,
+        jump: null,
+        attacks: []
+    };
+
+    faceTo = 1;
 
     constructor(){
         super();
@@ -13,12 +34,11 @@ class Entity extends GameObject {
         this.size = [64, 128];
         this.walkDir = [0, 0];
 
-        /**@type {String} */
         this.color = "#ffff4aff";
 
-        /**@type {Array<number>} */
-        this.spriteID = [0, 2];
-        this.spriteType = 'fill';
+        this.sprite = new Sprite(64, 'fill');
+
+        this.animations.walk = new Anim(this, 64, 1, 80, true);
 
         /**@type {Skill} */
         this.skill = new Skill();
@@ -28,7 +48,6 @@ class Entity extends GameObject {
 
         this.blocking = false;
         this.alive = true;
-        this.faceTo = 1;
         this.attack = null;
 
         this.delayer = new Delayer();
@@ -57,10 +76,23 @@ class Entity extends GameObject {
         return this.skill.speed * 18
     }
 
-    takeDamage(damage){
+    /**
+     * 
+     * @returns {EntityRenderData}
+     */
+    getRenderData() {
+        return super.getRenderData().concat(this.health, this.maxHealth, this.energy, this.maxEnergy);
+    }
+
+    /**
+     * 
+     * @param {number} damage 
+     * @param {number} tickRate 
+     */
+    takeDamage(damage, tickRate) {
         if(!this.blocking){
             this.health -= 2 * damage / (1 + this.skill.defence * this.skill.strength)
-            this.delayer.setTime("heal", Math.trunc(5 * Game.TICK_RATE / this.skill.regeneration) )
+            this.delayer.setTime("heal", Math.trunc(5 * tickRate / this.skill.regeneration) )
         } else {
             this.health -= damage / (1 + (this.skill.defence ** 2) * this.skill.strength)
         }
@@ -71,27 +103,28 @@ class Entity extends GameObject {
         }
     }
 
-    hasEnergy(usage){
+    hasEnergy(usage) {
         return this.energy - usage / (1 + this.skill.regeneration * this.skill.strength) > 0
     }
 
     /**
      * 
-     * @param {Number} usage
-     * @returns {Boolean} Boolean
+     * @param {number} usage
+     * @param {number} tickRate
+     * @returns {boolean} Boolean
      */
-    useEnergy(usage){
+    useEnergy(usage, tickRate) {
         var newEnergy = this.energy - usage / (1 + this.skill.regeneration * this.skill.strength)
         var hasEnough = false
 
         if(newEnergy > 0){
             this.energy = newEnergy
-            this.delayer.setTime("heal", Math.trunc(3 * 35 /*Game.TICK_RATE*/ / this.skill.regeneration))
+            this.delayer.setTime("heal", Math.trunc(3 * tickRate / this.skill.regeneration))
             hasEnough = true
         } else {
             this.energy = this.maxEnergy * .04
             this.takeDamage(this.maxHealth * .02 / this.skill.strength)
-            this.delayer.setTime("heal", Math.trunc(9 * 35 /*Game.TICK_RATE*/ / this.skill.regeneration))
+            this.delayer.setTime("heal", Math.trunc(9 * tickRate / this.skill.regeneration))
         }
 
         return hasEnough
