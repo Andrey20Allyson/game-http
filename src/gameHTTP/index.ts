@@ -27,8 +27,8 @@ export function createConnection(game: Game, socket: io.Socket) {
     socket.on('disconnect', onDisconnect);
 }
 
-export function start() {
-    const server = createIOServer();
+export function startGameServer(port?: number, hostname?: string) {
+    const server = createIOServer(port, hostname);
     const game = createGame();
     const gameUpdate = setInterval(
         () => server.emit('game-update', game.renderData),

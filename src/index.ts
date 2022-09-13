@@ -1,3 +1,3 @@
-import { start } from './gameHTTP';
+import { startGameServer } from './gameHTTP';
  
-const { game, server } = start();
+const { game, server } = startGameServer();

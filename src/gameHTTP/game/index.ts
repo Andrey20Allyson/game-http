@@ -188,6 +188,14 @@ export class Game{
 export function createGame() {
     const game = new Game();
 
+    let fol1 = game.addFollor();
+    let fol2 = game.addFollor();
+
+    fol1.size = [500, 200];
+    fol2.size = [200, 260];
+
+    fol2.pos[0] = 500;
+
     return game;
 }
 
