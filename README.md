@@ -15,8 +15,29 @@ A criação de um jogo é ótimo para testar conceitos e aprender mais sobre sua
 
 Nesse README é importanque destacar as tecnologias que foram utilizadas para a criação de um serviço como esse.
 
+---
+
 <div align="center">
     <a href="https://nodejs.org"><img src="images/node logo.jpg" alt="node" height="64px"></a>
     <a href="https://socket.io"><img src="images/socket.io logo.png" alt="socket.io" height="64px"></a>
     <a href="https://expressjs.com"><img src="images/express.jpg" alt="express" height="64px"></a>
 </div>
+<div align="center">
+    <h2>NodeJs | Socket.io | ExpressJs</h2>
+</div>
+
+---
+
+- ### NodeJS
+
+    Permite a execução de programas em `Javascript`, com um vasto leque de bibliotecas e frameworks que podem ser instaladas por meido do sistema de gerenciamento de pacotes `npm`.
+
+- ### Socket.io
+
+    A maneira mais simples de conectar cliente e servidor possibilitando uma `via de mão dupla` de transferência de dados entre cliente e servidor.
+    
+    Esse framework utiliza de eventos para tornar o processo mais intuitivo.
+
+- ### ExpressJs
+
+    Simplifica a criação de 
