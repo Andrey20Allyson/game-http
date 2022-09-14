@@ -1,6 +1,7 @@
 import { GameCanvas } from "./gui/gameCanvas.js";
 import { connectWithServer } from "./server-connection/connection.js";
 import { KeyboardListener } from "./input/keyboardListener.js";
+import {  } from 'ga'
 
 const LISTENER = new KeyboardListener();
 

@@ -1,5 +1,5 @@
 import { createIOServer } from './server';
-import { createGame, Game } from './game';
+import { createGame, Game } from './game/';
 import io from 'socket.io';
 
 export function createConnection(game: Game, socket: io.Socket) {
@@ -34,6 +34,15 @@ export function startGameServer(port?: number, hostname?: string) {
         () => server.emit('game-update', game.renderData),
         1000/40
     );
+
+    // TERRAIN_LOADER.load()
+    // .then(data => TERRAIN_LOADER.apply(data))
+    // .then(() => {
+    //     HTTP_SERVER.listen(PORT, 'localhost', () => {
+    //         console.clear();
+    //         console.log(">> [SERVER  ] Server now is listening on port %s", PORT);
+    //     });
+    // });
 
     game.run();
     server.on('connection', socket => createConnection(game, socket));
