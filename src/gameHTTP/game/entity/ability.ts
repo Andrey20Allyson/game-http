@@ -82,7 +82,6 @@ export class Attack{
 
         var hitBox: [...Vector2, ...Vector2] = [...attackHitPos, ...attackHitSize]
 
-        /**@type {Entity[]} */
         var targets: Entity[] = []
 
         for (var target of entityList) {
