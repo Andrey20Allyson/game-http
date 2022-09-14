@@ -3,10 +3,19 @@
     <img src="./screenshots/scr0.png" alt="screenshot">
 </div>
 
+<br>
+
+[![NPM](https://img.shields.io/badge/license-MIT-green)](https://github.com/Andrey20Allyson/node-read-line/blob/main/LICENSE)
+
 ## Sumário
 
 - [Sobre o Projeto](#sobre-o-projeto)
     - [Ideia inicial](#ideia-inicial)
+    - [Tecnologias utilizadas](#tecnologias-utilizadas)
+        - [NodeJs](#nodejs)
+        - [Socket.io](#expressjs)
+        - [ExpressJs](#socketio)
+    - [Tecnologias de desenvolvimento](#tecnologias-de-desenvolvimento)
 
 # Sobre o Projeto
 
