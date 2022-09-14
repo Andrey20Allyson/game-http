@@ -12,21 +12,21 @@ export interface IEntityAnimations {
 }
 
 export class Entity extends GameObject {
-    id?: string;
-    sprite: Sprite;
-    faceTo: number;
     animations: IEntityAnimations = {
         walk: new Anim(this, 64, 1, 80, true),
         jump: new Anim(this, 64, 1, 80, true),
         attacks: []
     };
+    id?: string;
+    sprite: Sprite;
+    faceTo: number;
     walkDir: Vector2;
     skill: Skill;
     health: number;
     energy: number;
     blocking: boolean;
     alive: boolean;
-    attack: string | null;
+    attack?: string;
     delayer: Delayer;
 
     constructor() {
@@ -46,7 +46,6 @@ export class Entity extends GameObject {
 
         this.blocking = false;
         this.alive = true;
-        this.attack = null;
         this.faceTo = 1;
 
         this.delayer = new Delayer();
@@ -163,7 +162,7 @@ export class Player extends Entity {
             return;
         }
 
-        this.attack = null;
+        this.attack = undefined;
     }
 
     setWalkDir(pressedKeys: string[]) {
@@ -187,7 +186,7 @@ export class NPC extends Entity {
     constructor() {
         super();
         this.color = "#ff4a4a2f";
-    };
+    }
 };
 
 export class Anim {

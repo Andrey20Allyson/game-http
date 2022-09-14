@@ -159,7 +159,8 @@ export class Game{
 
             }
 
-            let attack = Attack.ATTACKS[entity.attack ?? ''];
+            let attack = Attack.getAttack(entity.attack);
+            
             if (entity.delayer.isTimeOut("attack") && attack) 
                 attack.useAttack(entity, this.entities, this.tickRate);
 

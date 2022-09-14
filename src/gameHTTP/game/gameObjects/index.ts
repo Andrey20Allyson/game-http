@@ -23,18 +23,18 @@ export class GameObject extends Object2D {
 
         this.sprite = new Sprite(1, 'repeat');
         this.velocity = [0, 0];
-    };
+    }
 
     getRenderData(): RenderData {
         return [...this.pos, ...this.size, this.sprite.index, this.sprite.type];
-    };
+    }
 
-    colliding(x: number, y: number, w: number, h: number): boolean {
+    colliding(x: number, y: number, width: number, height: number): boolean {
         return (
-            (this.pos[0] < x + w) &&
+            (this.pos[0] < x + width) &&
             (this.pos[0] + this.size[0] > x) &&
-            (this.pos[1] < x + h) &&
+            (this.pos[1] < x + height) &&
             (this.pos[1] + this.size[1] > y)
         );
-    };
+    }
 };
