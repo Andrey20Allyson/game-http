@@ -32,9 +32,9 @@ Nesse trecho serão destacadas as tecnologias que foram utilizadas para a criaç
 ---
 
 <div align="center">
-    <a href="https://nodejs.org"><img src="images/node logo.jpg" alt="node" height="64px"></a>
-    <a href="https://socket.io"><img src="images/socket.io logo.png" alt="socket.io" height="64px"></a>
-    <a href="https://expressjs.com"><img src="images/express.jpg" alt="express" height="64px"></a>
+    <a href="https://nodejs.org"><img src="https://nodejs.org/static/images/logo.svg" alt="node" height="64px"></a>
+    <a href="https://socket.io"><img src="https://socket.io/images/logo.svg" alt="socket.io" height="64px"></a>
+    <a href="https://expressjs.com"><img src="https://expressjs.com/images/express-facebook-share.png" alt="express" height="64px"></a>
 </div>
 <div align="center">
     <h2>NodeJs | Socket.io | ExpressJs</h2>
