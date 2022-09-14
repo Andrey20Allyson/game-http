@@ -5,8 +5,8 @@
 
 ## Sumário
 
-- [Sobre o Projeto](.#sobre-o-projeto)
-    - [Ideia inicial](.#ideia-inicial)
+- [Sobre o Projeto](#sobre-o-projeto)
+    - [Ideia inicial](#ideia-inicial)
 
 # Sobre o Projeto
 
