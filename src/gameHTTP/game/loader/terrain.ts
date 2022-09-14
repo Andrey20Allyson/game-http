@@ -1,4 +1,4 @@
-import { readFile } from 'fs';
+import { readFile } from 'fs/promises';
 import { homedir } from 'os';
 import { Game } from '..';
 import { GameObject, Vector2 } from '../gameObjects';
@@ -16,20 +16,16 @@ class TerrainLoader {
         this.game = game;
     }
 
-    load(path: string = homedir() + '/AppData/Roaming/Game/terrain/t0.json') {
-        return new Promise((resolve, reject) => {
-            readFile(path, (err, data) => {
-                if (err) reject(err);
+    async load(path: string = homedir() + '/AppData/Roaming/Game/terrain/t0.json') {
+        let data = await readFile(path);
 
-                let jsonData = JSON.parse(data.toString('utf-8'));
-                
-                resolve(jsonData);
-            });
-        });
+        let jsonData: Terrain = JSON.parse(data.toString('utf-8'));
+        
+        return jsonData;
     }
 
     apply(data: Terrain) {
-        data.follors.forEach(([x, y, w, h, sx, sy, stype]) => {
+        for (const [x, y, w, h, sx, sy, stype] of data.follors) {
             let object =  new GameObject();
             object.pos = [x, y];
             object.size = [w, h];
@@ -37,7 +33,7 @@ class TerrainLoader {
             object.sprite.type = stype;
 
             this.game.addFollor(object);
-        });
+        };
     }
 }
 
