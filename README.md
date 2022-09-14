@@ -13,7 +13,7 @@ A criação de um jogo é ótimo para testar conceitos e aprender mais sobre sua
 
 ## Tecnologias utilizadas
 
-Nesse README é importanque destacar as tecnologias que foram utilizadas para a criação de um serviço como esse.
+Nesse trecho serão destacadas as tecnologias que foram utilizadas para a criação desse serviço.
 
 ---
 
@@ -30,14 +30,20 @@ Nesse README é importanque destacar as tecnologias que foram utilizadas para a 
 
 - ### NodeJS
 
-    Permite a execução de programas em `Javascript`, com um vasto leque de bibliotecas e frameworks que podem ser instaladas por meido do sistema de gerenciamento de pacotes `npm`.
+    - Permite a execução de programas em `Javascript`.
+    
+    - Possui um vasto leque de bibliotecas e frameworks que podem ser instaladas por meido do sistema de gerenciamento de pacotes `npm`.
 
 - ### Socket.io
 
-    A maneira mais simples de conectar cliente e servidor possibilitando uma `via de mão dupla` de transferência de dados entre cliente e servidor.
+    - A maneira mais simples de conectar cliente e servidor possibilitando uma `via de mão dupla` de transferência de dados entre cliente e servidor.
     
-    Esse framework utiliza de eventos para tornar o processo mais intuitivo.
+    - Esse framework utiliza de eventos para tornar o processo mais intuitivo.
 
 - ### ExpressJs
 
-    Simplifica a criação de 
+    - Simplifica a criação de serviços HTTP.
+    
+    - Tambem é utilizada em aplicações mobile.
+
+## Tecnologias de desenvolvimento
