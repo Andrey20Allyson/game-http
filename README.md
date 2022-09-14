@@ -3,6 +3,11 @@
     <img src="./screenshots/scr0.png" alt="screenshot">
 </div>
 
+## Sumário
+
+- [Sobre o Projeto](.#sobre-o-projeto)
+    - [Ideia inicial](.#ideia-inicial)
+
 # Sobre o Projeto
 
 Esse projeto tem como premissa a criação de um **jogo de luta multi-jogador** com a renderização no `client-side` e cálculos físicos e lógica no `server-side`, trazendo uma arquitetura simples porem poderosa!
@@ -47,3 +52,4 @@ Nesse trecho serão destacadas as tecnologias que foram utilizadas para a criaç
     - Tambem é utilizada em aplicações mobile.
 
 ## Tecnologias de desenvolvimento
+
