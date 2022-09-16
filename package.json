@@ -2,12 +2,15 @@
   "name": "game_http",
   "version": "1.0.0",
   "description": "",
-  "main": "node dist\\index.js",
+  "main": "node dist/index.js",
   "scripts": {
-    "dev:server": "ts-node-dev --respawn --transpile-only src\\index.ts",
-    "build": "tsc",
-    "start": "node dist\\index.js",
-    "test": "vitest"
+    "build": "tsc -p src && tsc -p client",
+    "build:server": "tsc -p src",
+    "build:client": "tsc -p client",
+    "build-start": "tsc -p src && tsc -p client && node dist/index.js",
+    "start": "node dist/index.js",
+    "test": "vitest",
+    "dev:server": "ts-node-dev src/index.ts --respawn --transpile-only"
   },
   "keywords": [],
   "author": "Andrey Allyson",

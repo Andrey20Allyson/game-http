@@ -1,16 +1,5 @@
-class KeyboardListener{
-    // keysPresseds = {
-    //     a: false,
-    //     w: false,
-    //     s: false,
-    //     d: false,
-    //     j: false,
-    //     k: false,
-    //     l: false
-    // };
-    
-    /**@type {string[]} */
-    pressedKeys = [];
+export class KeyboardListener{
+    pressedKeys: string[] = [];
 
     constructor() {
         document.addEventListener('keydown', ({ key }) => {
@@ -25,6 +14,4 @@ class KeyboardListener{
                 null;
         });
     }
-}
-
-export { KeyboardListener }
+};
