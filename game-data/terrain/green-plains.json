@@ -1,0 +1,18 @@
+{
+  "$schema": "../schemas/terrain-schema.json",
+  "nome": "Green Plains",
+  "data": [
+    {
+      "pos": [0, 0],
+      "size": [500, 300],
+      "spritePos": [0, 1],
+      "spriteType": "repeat"
+    },
+    {
+      "pos": [300, 300],
+      "size": [100, 50],
+      "spritePos": [0, 1],
+      "spriteType": "repeat"
+    }
+  ]
+}

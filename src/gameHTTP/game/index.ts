@@ -1,25 +1,59 @@
 import { Attack } from "./entity/ability";
 import { GameObject, Vector2 } from "./gameObjects";
 import { Player, NPC } from "./entity";
+import { TerrainLoader } from "./loader/terrain";
+import EventEmitter from "events";
 
 export type RenderData = [...Vector2, ...Vector2, number, string];
 export type EntityRenderData = [...RenderData, number, number, number, number];
 export type GameRenderData = [RenderData[], EntityRenderData[], RenderData[]]
 
-export class Game{
-    private tickRate: number;
+export interface GameOptions {
+    tickRate?: number,
+}
 
-    simulateInterval?: NodeJS.Timer;
+abstract class GameEventEmitter extends EventEmitter {
+    on(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    on(eventName: 'tick', listener: () => void): this;
+    on(eventName: 'player-added', listener: (player: Player) => void): this;
+    on(eventName: 'player-removed', listener: (player: Player) => void): this;
+    on(eventName: string, listener: (...args: any[]) => void): this {
+        return super.on(eventName, listener)
+    }
+
+    once(eventName: string | symbol, listener: (...args: any[]) => void): this;
+    once(eventName: 'tick', listener: () => void): this;
+    once(eventName: 'player-added', listener: (player: Player) => void): this;
+    once(eventName: 'player-removed', listener: (player: Player) => void): this;
+    once(eventName: string | symbol, listener: (...args: any[]) => void): this {
+        return super.once(eventName, listener);
+    }
+
+    emit(eventName: 'tick'): boolean;
+    emit(eventName: 'player-added', player: Player): boolean;
+    emit(eventName: 'player-removed', player: Player): boolean;
+    emit(eventName: string | symbol, ...args: any[]): boolean {
+        return super.emit(eventName, ...args);
+    }
+}
+
+export class Game extends GameEventEmitter {
+    private tickRate: number;
+    private running: boolean;
+    private simulateInterval?: NodeJS.Timer;
+
     gravity: number;
     players: Player[];
     npcs: NPC[];
     follors: GameObject[];
     backGround: GameObject[];
     frontGround: GameObject[];
+    terrainLoader: TerrainLoader;
 
-    constructor() {
+    constructor(options: GameOptions = {}) {
+        super();
         this.gravity = 4.8;
-        this.tickRate = 35;
+        this.tickRate = options.tickRate ?? 35;
 
         this.players = [];
         this.npcs = [];
@@ -27,6 +61,10 @@ export class Game{
         this.follors = [];
         this.backGround = [];
         this.frontGround = [];
+
+        this.terrainLoader = new TerrainLoader(this);
+
+        this.running = false;
     };
 
     get renderData(): GameRenderData {
@@ -55,11 +93,16 @@ export class Game{
     }
 
     get tickPerSec(): number {
-        return 1000 / this.tickRate
+        return 1000 / this.tickRate;
+    }
+
+    get isRunning() {
+        return this.running;
     }
 
     addPlayer(player: Player = new Player()): Player {
         this.players.push(player);
+        this.emit('player-added', player);
         return player;
     }
 
@@ -77,9 +120,22 @@ export class Game{
         this.frontGround.push(frontGrount);
         return frontGrount;
     }
-    
-    removePlayer(playerID: string) {
-        this.players = this.players.filter(({ id }) => id !== playerID);
+
+    removePlayer(playerID: string): Player | undefined {
+        let playerIndex = this.players.findIndex(({ id }) => id === playerID);
+
+        if (playerIndex >= 0) {
+            let player = this.players[playerIndex];
+
+            this.players.splice(playerIndex);
+            this.emit('player-removed', player);
+
+            return player;
+        }
+    }
+
+    async loadTerrain(terrainName?: string) {
+
     }
 
     getColision(gameObject: GameObject) {
@@ -88,10 +144,10 @@ export class Game{
 
         for (let follor of this.follors) {
             if (!hCollision)
-                hCollision = follor.colliding(gameObject.pos[0] + gameObject.velocity[0], gameObject.pos[1], ...gameObject.size)? follor: null;
+                hCollision = follor.colliding(gameObject.pos[0] + gameObject.velocity[0], gameObject.pos[1], ...gameObject.size) ? follor : null;
 
             if (!vCollision)
-                vCollision = follor.colliding(gameObject.pos[0], gameObject.pos[1] + gameObject.velocity[1], ...gameObject.size)? follor: null;
+                vCollision = follor.colliding(gameObject.pos[0], gameObject.pos[1] + gameObject.velocity[1], ...gameObject.size) ? follor : null;
 
             if (hCollision && vCollision) return { hCollision, vCollision };
         }
@@ -104,7 +160,7 @@ export class Game{
             this.stop();
 
         this.simulateInterval = setInterval(
-            () => this.simulate(),
+            () => this.tick(),
             this.tickPerSec
         );
     }
@@ -112,6 +168,11 @@ export class Game{
     stop() {
         clearInterval(this.simulateInterval);
         this.simulateInterval = undefined;
+    }
+
+    tick() {
+        this.simulate();
+        this.emit('tick');
     }
 
     /**
@@ -122,14 +183,14 @@ export class Game{
         for (let entity of this.entities) {
             const { hCollision, vCollision } = this.getColision(entity);
 
-            if (!hCollision){
-                if (entity.delayer.isTimeOut("attack") || !vCollision) 
+            if (!hCollision) {
+                if (entity.delayer.isTimeOut("attack") || !vCollision)
                     entity.pos[0] += entity.velocity[0];
 
             } else if (entity.pos[0] > hCollision.pos[0]) {
                 entity.pos[0] = hCollision.pos[0] + hCollision.size[0];
                 entity.velocity[0] = 0;
-                
+
             } else {
                 entity.pos[0] = hCollision.pos[0] - entity.size[0];
                 entity.velocity[0] = 0;
@@ -160,14 +221,14 @@ export class Game{
             }
 
             let attack = Attack.getAttack(entity.attack);
-            
-            if (entity.delayer.isTimeOut("attack") && attack) 
+
+            if (entity.delayer.isTimeOut("attack") && attack)
                 attack.useAttack(entity, this.entities, this.tickRate);
 
-            if (entity.blocking && entity.delayer.isTimeOutReset("blockingEnergyUsage")) 
+            if (entity.blocking && entity.delayer.isTimeOutReset("blockingEnergyUsage"))
                 entity.useEnergy(1, this.tickRate);
-                
-            if (entity.delayer.isTimeOutReset("heal")) 
+
+            if (entity.delayer.isTimeOutReset("heal"))
                 entity.heal();
 
             let { walk } = entity.animations;
@@ -187,7 +248,7 @@ export class Game{
 }
 
 export function createGame() {
-    const game = new Game();
+    const game = new Game({ tickRate: 35 });
 
     let fol1 = game.addFollor();
     let fol2 = game.addFollor();

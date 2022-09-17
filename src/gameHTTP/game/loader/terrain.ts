@@ -11,6 +11,7 @@ interface Terrain {
 
 class TerrainLoader {
     game: Game;
+    loadedTerrain?: Terrain;
 
     constructor(game: Game) {
         this.game = game;
