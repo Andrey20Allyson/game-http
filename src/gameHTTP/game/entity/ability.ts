@@ -31,7 +31,7 @@ export class Skill{
     }
 
     get speed() {
-        return .5 + .15 * this.level + .1 * this.speedSkillPoints;
+        return .2 + .07 * this.level + .05 * this.speedSkillPoints;
     }
 
     get strength() {

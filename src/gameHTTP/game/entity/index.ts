@@ -46,7 +46,7 @@ export class Entity extends GameObject {
         this.faceTo = 1;
 
         this.animations = {
-            walk: new Anim(this, 96, 6, 4, true),
+            walk: new Anim(this, 96, 8, 2, true),
             jump: new Anim(this, 0, 0, 0),
             attacks: []
         };
