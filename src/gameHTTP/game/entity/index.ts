@@ -12,12 +12,10 @@ export interface IEntityAnimations {
 }
 
 export class Entity extends GameObject {
-    animations: IEntityAnimations = {
-        walk: new Anim(this, 64, 1, 80, true),
-        jump: new Anim(this, 64, 1, 80, true),
-        attacks: []
-    };
     id?: string;
+    attack?: string;
+
+    animations: IEntityAnimations;
     sprite: Sprite;
     faceTo: number;
     walkDir: Vector2;
@@ -26,7 +24,6 @@ export class Entity extends GameObject {
     energy: number;
     blocking: boolean;
     alive: boolean;
-    attack?: string;
     delayer: Delayer;
 
     constructor() {
@@ -47,6 +44,12 @@ export class Entity extends GameObject {
         this.blocking = false;
         this.alive = true;
         this.faceTo = 1;
+
+        this.animations = {
+            walk: new Anim(this, 96, 6, 4, true),
+            jump: new Anim(this, 0, 0, 0),
+            attacks: []
+        };
 
         this.delayer = new Delayer();
         this.delayer.addDelay("heal", 8);

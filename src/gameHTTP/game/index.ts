@@ -160,7 +160,7 @@ export class Game extends GameEventEmitter {
             this.stop();
 
         this.simulateInterval = setInterval(
-            () => this.tick(),
+            this.tick.bind(this),
             this.tickPerSec
         );
     }

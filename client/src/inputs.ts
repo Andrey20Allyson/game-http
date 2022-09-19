@@ -1,4 +1,4 @@
-export class KeyboardListener{
+export class KeyboardListener {
     pressedKeys: string[] = [];
 
     constructor() {
