@@ -62,7 +62,7 @@ export class GameServer implements IGameServer {
     createConnection(game: Game, socket: io.Socket) {
         console.log('>> [Connection] Socket connected with id: %s', socket.id);
 
-        const player = game.addPlayer();
+        const player = game.createPlayer();
         const playerUpdate = setInterval(() => this.updatePlayersGUI(socket, player), 1000/20);
 
         player.pos = [20 + 600 * Math.random(), 400];

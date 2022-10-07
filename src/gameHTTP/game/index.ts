@@ -100,31 +100,42 @@ export class Game extends GameEventEmitter {
         return this.running;
     }
 
-    addPlayer(player: Player = new Player()): Player {
+    createPlayer(): Player {
+        const player = new Player({ game: this });
+
         this.players.push(player);
         this.emit('player-added', player);
+
         return player;
     }
 
-    addNPC(npc: NPC = new NPC()): NPC {
+    createNPC(): NPC {
+        const npc = new NPC({ game: this });
+
         this.npcs.push(npc);
+
         return npc;
     }
 
-    addFollor(follor: GameObject = new GameObject()): GameObject {
+    createFollor(): GameObject {
+        const follor = new GameObject({ game: this });
+
         this.follors.push(follor);
         return follor;
     }
 
-    addFrontGrount(frontGrount: GameObject = new GameObject()): GameObject {
-        this.frontGround.push(frontGrount);
-        return frontGrount;
+    createFrontGround(): GameObject {
+        const frontGround = new GameObject({ game: this });
+
+        this.frontGround.push(frontGround);
+
+        return frontGround;
     }
 
     removePlayer(playerID: string): Player | undefined {
         let playerIndex = this.players.findIndex(({ id }) => id === playerID);
 
-        if (playerIndex >= 0) {
+        if (playerIndex != -1) {
             let player = this.players[playerIndex];
 
             this.players.splice(playerIndex);
@@ -250,8 +261,8 @@ export class Game extends GameEventEmitter {
 export function createGame() {
     const game = new Game({ tickRate: 35 });
 
-    let fol1 = game.addFollor();
-    let fol2 = game.addFollor();
+    let fol1 = game.createFollor();
+    let fol2 = game.createFollor();
 
     fol1.size = [500, 200];
     fol2.size = [200, 260];

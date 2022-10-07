@@ -1,4 +1,5 @@
 import { Sprite } from "./sprites";
+import { Game } from "..";
 
 export type Vector2 = [number, number];
 export type RenderData = [...Vector2, ...Vector2, number, string];
@@ -14,14 +15,22 @@ export class Object2D {
     }
 };
 
+export interface GameObjectOptions {
+    game: Game;
+}
+
 export class GameObject extends Object2D {
     sprite: Sprite;
+    game: Game;
     velocity: Vector2;
 
-    constructor() {
+    constructor({ game }: GameObjectOptions) {
         super();
 
         this.sprite = new Sprite(1, 'repeat');
+
+        this.game = game;
+
         this.velocity = [0, 0];
     }
 

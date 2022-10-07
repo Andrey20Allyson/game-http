@@ -1,7 +1,8 @@
-import { GameObject, Vector2, RenderData } from "../gameObjects";
+import { GameObject, GameObjectOptions, Vector2, RenderData } from "../gameObjects";
 import { Delayer } from '../util/delayer';
 import { Skill } from "./ability";
 import { Sprite } from '../gameObjects/sprites'
+import { Game } from "..";
 
 export type EntityRenderData = [...RenderData, number, number, number, number];
 
@@ -9,6 +10,10 @@ export interface IEntityAnimations {
     walk: Anim;
     jump: Anim;
     attacks: [string, Anim][];
+}
+
+export interface EntityOptions extends GameObjectOptions {
+    
 }
 
 export class Entity extends GameObject {
@@ -26,8 +31,8 @@ export class Entity extends GameObject {
     alive: boolean;
     delayer: Delayer;
 
-    constructor() {
-        super();
+    constructor({ game }: EntityOptions) {
+        super({ game });
 
         this.size = [64, 128];
         this.walkDir = [0, 0];
@@ -138,6 +143,10 @@ export class Entity extends GameObject {
 
 export type PlayerGUIData = [number, number, number, number, number, number, number];
 
+export interface PlayerOptions extends EntityOptions {
+
+}
+
 export class Player extends Entity {
     attackInputs: [string, string][] = [
         ['j', 'punch'],
@@ -154,8 +163,8 @@ export class Player extends Entity {
         [1,  0]
     ]
 
-    constructor() {
-        super()
+    constructor({ game }: PlayerOptions) {
+        super({ game })
         this.color = "#0fea2a2f"
     }
 
@@ -185,9 +194,13 @@ export class Player extends Entity {
     }
 }
 
+export interface NPCOptions extends EntityOptions {
+
+}
+
 export class NPC extends Entity {
-    constructor() {
-        super();
+    constructor({ game }: NPCOptions) {
+        super({ game });
         this.color = "#ff4a4a2f";
     }
 };

@@ -8,7 +8,7 @@ test('game shold emit "player-added" when addPlayer has called', (ctx) => {
 
     game.on('player-added', listener);
 
-    game.addPlayer();
+    game.createPlayer();
 
     expect(listener).toHaveBeenCalled();
 });
@@ -49,7 +49,7 @@ test('game shold emit "player-removed" if a player has removed', (ctx) => {
     game.on('player-added', playerAddedListener);
     game.on('player-removed', playerRemovedListener);
 
-    const player = game.addPlayer();
+    const player = game.createPlayer();
     
     player.id = 'ID';
 

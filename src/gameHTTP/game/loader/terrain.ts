@@ -27,13 +27,12 @@ class TerrainLoader {
 
     apply(data: Terrain) {
         for (const [x, y, w, h, sx, sy, stype] of data.follors) {
-            let object =  new GameObject();
+            let object = this.game.createFollor();
             object.pos = [x, y];
             object.size = [w, h];
             object.sprite.setIndexByVector2(sx, sy);
             object.sprite.type = stype;
 
-            this.game.addFollor(object);
         };
     }
 }
