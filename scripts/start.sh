@@ -14,8 +14,10 @@ then
     tsc -p client
     echo "building [server]"
     tsc -p src
+
 else
-    echo "na"
+    echo "unknow sub-command"
+
 fi
 
 echo "running [server]"
