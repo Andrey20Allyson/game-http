@@ -1,4 +1,3 @@
-import { Attack } from "./entity/ability";
 import { GameObject, Vector2 } from "./gameObjects";
 import { Player, NPC } from "./entity";
 import { TerrainLoader } from "./loader/terrain";
@@ -90,6 +89,10 @@ export class Game extends GameEventEmitter {
             ...this.players,
             ...this.npcs
         ];
+    }
+
+    get msPerTick(): number {
+        return this.tickRate;
     }
 
     get tickPerSec(): number {
@@ -229,30 +232,6 @@ export class Game extends GameEventEmitter {
                 entity.pos[1] = vCollision.pos[1] - entity.size[1];
                 entity.velocity[1] = 0;
 
-            }
-
-            let attack = Attack.getAttack(entity.attack);
-
-            if (entity.delayer.isTimeOut("attack") && attack)
-                attack.useAttack(entity, this.entities, this.tickRate);
-
-            if (entity.blocking && entity.delayer.isTimeOutReset("blockingEnergyUsage"))
-                entity.useEnergy(1, this.tickRate);
-
-            if (entity.delayer.isTimeOutReset("heal"))
-                entity.heal();
-
-            let { walk } = entity.animations;
-
-            if (entity.walkDir[0]) {
-                if (walk.animDir !== entity.faceTo)
-                    walk.delayer.setTime('next-frame', 0);
-
-                if (walk.delayer.isTimeOutReset('next-frame'))
-                    walk.next();
-            } else {
-                walk.delayer.setTime('next-frame', 0);
-                walk.reset()
             }
         }
     }

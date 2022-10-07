@@ -2,6 +2,7 @@ import { GameObject, GameObjectOptions, Vector2, RenderData } from "../gameObjec
 import { Delayer } from '../util/delayer';
 import { Skill } from "./ability";
 import { Sprite } from '../gameObjects/sprites'
+import { Attack } from "./ability";
 import { Game } from "..";
 
 export type EntityRenderData = [...RenderData, number, number, number, number];
@@ -59,7 +60,9 @@ export class Entity extends GameObject {
         this.delayer = new Delayer();
         this.delayer.addDelay("heal", 8);
         this.delayer.addDelay("attack", 0);
-        this.delayer.addDelay("blockingEnergyUsage", 6);
+        this.delayer.addDelay("blocking-energy-usage", 6);
+
+        this.game.on('tick', this.tickListener.bind(this));
     }
 
     get maxHealth(): number {
@@ -80,6 +83,38 @@ export class Entity extends GameObject {
 
     get walkSpeed() {
         return this.skill.speed * 18
+    }
+
+    tickListener(): void {
+        super.tickListener();
+
+        const attack = Attack.getAttack(this.attack);
+
+        if (this.delayer.isTimeOut("attack") && attack)
+            attack.useAttack(this, this.game.entities, this.game.msPerTick);
+
+
+        if (this.blocking && this.delayer.isTimeOutReset("blocking-energy-usage"))
+            this.useEnergy(1, this.game.msPerTick);
+
+
+        if (this.delayer.isTimeOutReset("heal"))
+            this.heal();
+
+        const { walk } = this.animations;
+
+        if (this.walkDir[0]) {
+            if (walk.animDir !== this.faceTo)
+                walk.delayer.setTime('next-frame', 0);
+
+            if (walk.delayer.isTimeOutReset('next-frame'))
+                walk.next();
+
+        } else {
+            walk.delayer.setTime('next-frame', 0);
+            walk.reset();
+
+        }
     }
 
     getEntityRenderData(): EntityRenderData {

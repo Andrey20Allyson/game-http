@@ -34,6 +34,10 @@ export class GameObject extends Object2D {
         this.velocity = [0, 0];
     }
 
+    tickListener(): void {
+        
+    }
+
     getRenderData(): RenderData {
         return [...this.pos, ...this.size, this.sprite.index, this.sprite.type];
     }
